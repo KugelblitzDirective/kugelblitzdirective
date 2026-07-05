@@ -48,6 +48,30 @@ padding: 15px;
 margin-top: 40px;
 }
 
+select {
+  background-color: #1a0610;
+  color: white;
+}
+
+select option {
+  background-color: #2b0a14;
+  color: white;
+}
+
+select option:checked,
+select option:hover {
+  background-color: #3b0f1a;
+  color: white;
+}
+
+.details-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 10px;
+  padding: 14px 16px;
+  margin: 14px 0;
+}
+
 .motto {
 font-style: italic;
 color: gold;
@@ -74,21 +98,86 @@ color: gold;
 </nav>
 
 <main>
-<div class="details-card" style="text-align: center">
+<div style="text-align: center">
 <img src="https://kugelblitzdirective.github.io/kugelblitzdirective/images/stillworking.png" alt="Still working!" style = "width:250px; max-width: 100%; border-radius: 8px; margin-bottom: 15px; border: 2px solid gold;">
 </div>
 
 <div style="text-align:center">
 <p>
 
-THIS WIKI PAGE IS UNDER CONSTRUCTION!
+THIS WIKI PAGE IS UNDER CONSTRUCTION! EXPECT FEW TO NO ARTICLES, AND FOR THE FINDER NOT TO WORK UNTIL THE SITE IS CREATED PROPERLY!
 
 </p>
 <p>
 
-This site will serve as the wiki for all of Kugelblitz's work!
+This site will serve as the wiki for all of Kugelblitz's work!<br> Use the search function below to find wiki pages!
 
 </p>
+<div class="details-card">
+  <h2>Article Finder</h2>
+
+  <input id="q" type="text" placeholder="Search by name.." style="width:100%; padding:10px; border-radius:8px; border:1px solid rgba(255,255,255,0.15); background:rgba(255,255,255,0.06); color:white;">
+
+<div id="results"></div>
+<script>
+  const CATALOG_URL = "laws/catalog.json";
+
+  const qEl = document.getElementById("q");
+  const resultsEl = document.getElementById("results");
+
+  let all = [];
+
+  function norm(s) {
+    return String(s ?? "").toLowerCase();
+  }
+
+  function render(list) {
+    if (!list.length) {
+      resultsEl.innerHTML = `<div class="details-card"><p>No matching articles found.</p></div>`;
+      return;
+    }
+
+    resultsEl.innerHTML = list.map(item => `
+      <div class="details-card">
+        <h3 style="margin:0 0 6px 0;">
+          <a href="${item.url}" style="color:#79b8ff; text-decoration:none;">
+            ${item.title}
+          </a>
+        </h3>
+        <p style="margin:0; color:#c8c8c8;">
+          ${item.summary || ""}
+        </p>
+      </div>
+    `).join("");
+  }
+
+  function applyFilters() {
+    const q = norm(qEl.value);
+
+    const filtered = all
+      .filter(item => !q || norm(item.title).includes(q))
+      .sort((a, b) => item.title.localeCompare(b.title));
+
+    render(filtered);
+  }
+
+  async function init() {
+    try {
+      const res = await fetch(CATALOG_URL, { cache: "no-store" });
+      if (!res.ok) throw new Error(`Failed to load catalog (${res.status})`);
+
+      all = await res.json();
+
+      qEl.addEventListener("input", applyFilters);
+
+      applyFilters();
+    } catch (err) {
+      resultsEl.innerHTML = `<div class="details-card"><p><strong>Error:</strong> ${err.message}</p></div>`;
+    }
+  }
+
+  init();
+</script>
 </div>
 </main>
 
