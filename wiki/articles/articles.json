@@ -1,7 +1,12 @@
 [
   {
-    "title": "Yeah",
-    "summary": "Yeah..",
+    "title": "TEST ARTICLE!",
+    "summary": "THIS ARTICLE IS A TEST, THE URL DOES NOT WORK AND WILL RETURN AN ERROR!",
     "url": "yeah.yeah"
+  }
+  {
+    "title": "Antarctic Federation Starfleet Navy",
+    "summary": "The naval forces of the Antarctic Federation! The faction played in the Ellsworth game!",
+    "url": "articles/afsnarticle.html"
   }
 ]
