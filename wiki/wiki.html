@@ -156,7 +156,7 @@ This site will serve as the wiki for all of Kugelblitz's work!<br> Use the searc
 
     const filtered = all
       .filter(item => !q || norm(item.title).includes(q))
-      .sort((a, b) => item.title.localeCompare(b.title));
+      .sort((a, b) => a.title.localeCompare(b.title));
 
     render(filtered);
   }
